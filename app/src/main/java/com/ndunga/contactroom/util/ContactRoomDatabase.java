@@ -2,9 +2,11 @@ package com.ndunga.contactroom.util;
 
 import android.content.Context;
 
+import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.ndunga.contactroom.data.ContactDao;
 import com.ndunga.contactroom.model.Contact;
@@ -24,7 +26,7 @@ public abstract class ContactRoomDatabase extends RoomDatabase {
 
     public static final int N_THREADS = 4;
     //3.Instantiate Executors Service. - helps us to run things in a back thread.
-    private static final ExecutorService databaseWriteExecutor = Executors.newFixedThreadPool(N_THREADS);
+    public static final ExecutorService databaseWriteExecutor = Executors.newFixedThreadPool(N_THREADS);
 
     //4.create getDatabase method
 
@@ -33,12 +35,37 @@ public abstract class ContactRoomDatabase extends RoomDatabase {
             synchronized (ContactRoomDatabase.class) {
                 if(INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                            ContactRoomDatabase.class,"contact_database").build();
+                            ContactRoomDatabase.class,"contact_database").addCallback(sRoomDbCallback).build();
                 }
             }
         }
 
         return INSTANCE;
     }
+
+    public static final RoomDatabase.Callback sRoomDbCallback =
+            new RoomDatabase.Callback(){
+                @Override
+                public void onCreate(@NonNull SupportSQLiteDatabase db) {
+                    super.onCreate(db);
+
+                    //call dbWriteExecutor - It helps us to write things in the back threads.
+                    databaseWriteExecutor.execute(()->{
+                        //access the dao from instance
+                        ContactDao contactDao = INSTANCE.contactDao();
+
+                        //deleteAll, before inserting.
+                        contactDao.deleteAll();
+
+                        //Insert data to our tables.
+                        Contact contact = new Contact("Allen","Lawyer");
+
+                        contactDao.insert(contact);
+
+                        contact = new Contact("Bond","spy");
+                        contactDao.insert(contact);
+                    });
+                }
+            };
 
 }

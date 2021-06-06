@@ -25,4 +25,13 @@ public class ContactRepository {
         //3.overwrite allcontacts.
         allContacts = contactDao.getAllContacts();
     }
+
+    //This is  for getting all contacts data
+    public LiveData<List<Contact>> getAllData(){ return  allContacts; }
+
+    public void insert(Contact contact) {
+        ContactRoomDatabase.databaseWriteExecutor.execute(()-> {
+            contactDao.insert(contact);
+        });
+    }
 }
