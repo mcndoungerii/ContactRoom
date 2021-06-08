@@ -27,7 +27,7 @@ public class ContactViewModel extends AndroidViewModel {
     //creating APIs same as in the Repositories.
     public LiveData<List<Contact>> getAllContacts(){return  allContacts;}
 
-    public void insert(Contact contact) {
+    public static void insert(Contact contact) {
         repository.insert(contact);
     }
 }
