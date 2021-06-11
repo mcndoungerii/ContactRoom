@@ -8,6 +8,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -16,6 +17,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.ndunga.contactroom.R;
+import com.ndunga.contactroom.adapter.RecyclerViewAdapter;
 import com.ndunga.contactroom.databinding.ActivityMainBinding;
 import com.ndunga.contactroom.model.Contact;
 import com.ndunga.contactroom.model.ContactViewModel;
@@ -26,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     public static final int NEW_CONTACT_REQUEST_CODE = 1;
     private ContactViewModel contactViewModel;
     private ActivityMainBinding binding;
+    private RecyclerViewAdapter recyclerViewAdapter;
 
     ActivityResultLauncher<Intent> someActivityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -56,12 +59,15 @@ public class MainActivity extends AppCompatActivity {
         contactViewModel = new ViewModelProvider.AndroidViewModelFactory(
                 this.getApplication()).create(ContactViewModel.class);
 
+        //Seeting up Recycler view LayoutSize & LayoutManager
+        binding.recyclerView.setHasFixedSize(true);
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
         contactViewModel.getAllContacts().observe(this,contacts -> {
-            StringBuilder builder = new StringBuilder();
-            for(Contact contact: contacts) {
-                builder.append("-").append(contact.getName()).append(" ").append(contact.getOccupation());
-            }
-            binding.textView.setText(builder.toString());
+            recyclerViewAdapter = new RecyclerViewAdapter(contacts,MainActivity.this);
+
+            //set up adapter
+            binding.recyclerView.setAdapter(recyclerViewAdapter);
         });
 
 
@@ -76,13 +82,5 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, @Nullable  Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//
-//        if(requestCode == NEW_CONTACT_REQUEST_CODE && resultCode == RESULT_OK) {
-//            Log.d("Name::",data.getStringExtra(NewContact.NAME_REPLY));
-//            Log.d("Occupation::",data.getStringExtra(NewContact.NAME_OCCUPATION));
-//        }
-//    }
+
 }

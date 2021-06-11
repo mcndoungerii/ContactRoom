@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
@@ -16,10 +17,10 @@ import java.util.List;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
 
-    private LiveData<List<Contact>> contactList;
+    private List<Contact> contactList;
     private Context context;
 
-    public RecyclerViewAdapter(LiveData<List<Contact>> contactList, Context context) {
+    public RecyclerViewAdapter(List<Contact> contactList, Context context) {
         this.contactList = contactList;
         this.context = context;
     }
@@ -39,19 +40,34 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public void onBindViewHolder(@NonNull  RecyclerViewAdapter.ViewHolder holder, int position) {
+        //since,we want to access the position of whats in contactList, and our Recycler view will know how to render the data
+        Contact contact = contactList.get(position);
 
+        //Access the Holder.
+        holder.name.setText(contact.getName());
+        holder.occupation.setText(contact.getOccupation());
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return contactList.size();
     }
 
     //ViewHolder -- boost performance by rendering views in a Recycler View, this recycles view when user scrolls ups and down, left to right, and
     //You don't have to worry on the size of your data to be rendered.
     public class ViewHolder extends RecyclerView.ViewHolder {
+
+        private TextView name;
+        private TextView occupation;
+
         public ViewHolder(@NonNull View itemView) {
+
             super(itemView);
+
+            name = itemView.findViewById(R.id.row_name_textview);
+            occupation = itemView.findViewById(R.id.row_occupation_textview);
+
+
         }
     }
 }
