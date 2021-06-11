@@ -23,7 +23,7 @@ import com.ndunga.contactroom.model.Contact;
 import com.ndunga.contactroom.model.ContactViewModel;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements RecyclerViewAdapter.onContactClickListener {
 
     public static final int NEW_CONTACT_REQUEST_CODE = 1;
     private ContactViewModel contactViewModel;
@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         contactViewModel.getAllContacts().observe(this,contacts -> {
-            recyclerViewAdapter = new RecyclerViewAdapter(contacts,MainActivity.this);
+            recyclerViewAdapter = new RecyclerViewAdapter(contacts,MainActivity.this,this);
 
             //set up adapter
             binding.recyclerView.setAdapter(recyclerViewAdapter);
@@ -83,4 +83,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onContactClick(int position) {
+        Contact contact = contactViewModel.getAllContacts().getValue().get(position);
+
+        Log.d("onContact Click", contact.getName());
+    }
 }

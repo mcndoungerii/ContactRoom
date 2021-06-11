@@ -17,12 +17,14 @@ import java.util.List;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
 
-    private List<Contact> contactList;
-    private Context context;
+    private final List<Contact> contactList;
+    private final Context context;
+    private onContactClickListener contactClickListener;
 
-    public RecyclerViewAdapter(List<Contact> contactList, Context context) {
+    public RecyclerViewAdapter(List<Contact> contactList, Context context, onContactClickListener onContactClickListener) {
         this.contactList = contactList;
         this.context = context;
+        this.contactClickListener = onContactClickListener;
     }
 
     @NonNull
@@ -35,7 +37,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 .inflate(R.layout.contact_rows,parent,false);
 
         //2. return a ViewHolder object , and pass view
-        return new ViewHolder(view);
+        return new ViewHolder(view,contactClickListener);
     }
 
     @Override
@@ -55,19 +57,33 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     //ViewHolder -- boost performance by rendering views in a Recycler View, this recycles view when user scrolls ups and down, left to right, and
     //You don't have to worry on the size of your data to be rendered.
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         private TextView name;
         private TextView occupation;
-
-        public ViewHolder(@NonNull View itemView) {
+        private onContactClickListener onContactClickListener;
+        public ViewHolder(@NonNull View itemView, onContactClickListener onContactClickListener) {
 
             super(itemView);
 
             name = itemView.findViewById(R.id.row_name_textview);
             occupation = itemView.findViewById(R.id.row_occupation_textview);
+            this.onContactClickListener = onContactClickListener;
+
+            itemView.setOnClickListener(this);
 
 
         }
+
+        @Override
+        public void onClick(View v) {
+
+            onContactClickListener.onContactClick(getAdapterPosition());
+
+        }
+    }
+
+    public interface onContactClickListener {
+        void onContactClick(int position);
     }
 }
