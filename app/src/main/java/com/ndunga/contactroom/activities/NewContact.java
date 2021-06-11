@@ -29,6 +29,7 @@ public class NewContact extends AppCompatActivity {
 
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,7 +54,7 @@ public class NewContact extends AppCompatActivity {
 
 
                 replyIntent.putExtra(NAME_REPLY,name);
-                replyIntent.putExtra(NAME_OCCUPATION,name);
+                replyIntent.putExtra(NAME_OCCUPATION,occupation);
 
                 setResult(RESULT_OK,replyIntent);
 
@@ -68,7 +69,6 @@ public class NewContact extends AppCompatActivity {
 
             finish();
 
-            hideKeyboard(v);
 
 
         });
@@ -78,13 +78,7 @@ public class NewContact extends AppCompatActivity {
 
     }
 
-    private void hideKeyboard(View v) {
-        //Hide Keyboard
 
-        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-
-        inputMethodManager.hideSoftInputFromWindow(v.getWindowToken(),0);
-    }
 
 
 }

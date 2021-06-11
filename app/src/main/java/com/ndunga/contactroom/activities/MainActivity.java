@@ -33,6 +33,13 @@ public class MainActivity extends AppCompatActivity {
                 if (result.getResultCode() == Activity.RESULT_OK) {
                     // There are no request codes
                     Intent data = result.getData();
+                    String name = data.getStringExtra(NewContact.NAME_REPLY);
+                    String occupation = data.getStringExtra(NewContact.NAME_OCCUPATION);
+
+                    Contact contact = new Contact(name,occupation);
+
+                    ContactViewModel.insert(contact);
+
 
                     Log.d("Name::",data.getStringExtra(NewContact.NAME_REPLY));
                     Log.d("Occupation::",data.getStringExtra(NewContact.NAME_OCCUPATION));
@@ -59,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         binding.addButtonFab.setOnClickListener(v -> {
-            Intent intent = new Intent(this,NewContact.class);
+            Intent intent = new Intent(MainActivity.this,NewContact.class);
 
             someActivityResultLauncher.launch(intent);
 
