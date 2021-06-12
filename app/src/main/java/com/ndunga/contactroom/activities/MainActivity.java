@@ -88,5 +88,12 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
         Contact contact = contactViewModel.getAllContacts().getValue().get(position);
 
         Log.d("onContact Click", contact.getName());
+
+        Intent intent = new Intent(this,ContactDetails.class);
+
+        intent.putExtra("name_det",contact.getName());
+        intent.putExtra("occupation_det",contact.getOccupation());
+
+        startActivity(intent);
     }
 }

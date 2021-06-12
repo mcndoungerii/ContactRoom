@@ -40,7 +40,9 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:padding="@dimen/general_padding"
-                    android:text="TextView" />
+                    android:text="TextView"
+                    android:textColor="@color/white"
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/det_occupation_text_view"
