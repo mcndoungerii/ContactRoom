@@ -35,5 +35,5 @@ public class ContactViewModel extends AndroidViewModel {
 
     public static void update(Contact contact) { repository.update(contact);}
 
-    public static void  delete(Contact contact) {repository.delete(contact);}
+    public static void delete(Contact contact) {repository.delete(contact);}
 }

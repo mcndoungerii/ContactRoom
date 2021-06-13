@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
 
         Log.d("onContact Click", contact.getName());
 
-        Intent intent = new Intent(this,ContactDetails.class);
+        Intent intent = new Intent(this,NewContact.class);
 
         intent.putExtra(CONTACT_ID,contact.getId());
 

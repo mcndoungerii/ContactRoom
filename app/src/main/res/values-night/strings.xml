@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="update_text">Update</string>
+    <string name="delete_text">Delete</string>
+    <string name="empty">Please enter name or occupation</string>
+</resources>

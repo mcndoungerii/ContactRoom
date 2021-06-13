@@ -3,4 +3,7 @@
     <string name="name_text">Name</string>
     <string name="occupation_text">Occupation</string>
     <string name="save_text">Save</string>
+    <string name="update_text">Update</string>
+    <string name="delete_text">Delete</string>
+    <string name="empty">Please enter name or occupation</string>
 </resources>

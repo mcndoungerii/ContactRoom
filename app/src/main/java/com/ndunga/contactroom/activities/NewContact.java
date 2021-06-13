@@ -2,6 +2,7 @@ package com.ndunga.contactroom.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Context;
@@ -19,6 +20,8 @@ import com.ndunga.contactroom.databinding.ActivityNewContactBinding;
 import com.ndunga.contactroom.model.Contact;
 import com.ndunga.contactroom.model.ContactViewModel;
 
+import static android.view.View.GONE;
+
 public class NewContact extends AppCompatActivity {
 
     public static final String NAME_REPLY = "name_reply";
@@ -26,6 +29,10 @@ public class NewContact extends AppCompatActivity {
     private ActivityNewContactBinding binding;
 
     private ContactViewModel contactViewModel;
+
+    private Bundle bundle;
+    private int contactId = 0;
+    private Boolean isEdit = false;
 
 
 
@@ -37,7 +44,7 @@ public class NewContact extends AppCompatActivity {
 
         contactViewModel = new ViewModelProvider.AndroidViewModelFactory(this.getApplication()).create(ContactViewModel.class);
 
-
+        bundle = getIntent().getExtras();
 
         binding.saveButton.setOnClickListener(v -> {
             Intent replyIntent = new Intent();
@@ -73,6 +80,53 @@ public class NewContact extends AppCompatActivity {
 
         });
 
+
+        //get intent
+        if(getIntent().hasExtra(MainActivity.CONTACT_ID)) {
+            contactId = getIntent().getIntExtra(MainActivity.CONTACT_ID,0);
+
+            contactViewModel.get(contactId).observe(this, contact -> {
+
+                if(contact != null){
+                    binding.etName.setText(contact.getName());
+                    binding.etOccupation.setText(contact.getOccupation());
+                }
+
+            });
+
+            isEdit = true;
+        }
+
+        //update btn
+        binding.updateButton.setOnClickListener(v -> {
+            String name = binding.etName.getText().toString();
+            String occupation = binding.etOccupation.getText().toString();
+
+            if(TextUtils.isEmpty(name) || TextUtils.isEmpty(occupation)){
+                Snackbar.make(v,R.string.empty,Snackbar.LENGTH_SHORT).show();
+            }
+            else {
+                Contact contact = new Contact();
+
+                contact.setId(contactId);
+                contact.setName(name);
+                contact.setOccupation(occupation);
+
+                //call update method.
+                ContactViewModel.update(contact);
+                finish();
+            }
+        });
+
+        //check isEdit
+        if(isEdit){
+            binding.saveButton.setVisibility(GONE);
+        }
+        else {
+            binding.updateButton.setVisibility(GONE);
+            binding.deleteButton.setVisibility(GONE);
+
+        }
 
 
 
