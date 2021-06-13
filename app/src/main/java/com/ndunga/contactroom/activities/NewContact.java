@@ -99,23 +99,12 @@ public class NewContact extends AppCompatActivity {
 
         //update btn
         binding.updateButton.setOnClickListener(v -> {
-            String name = binding.etName.getText().toString();
-            String occupation = binding.etOccupation.getText().toString();
+            edit(v,false);
+        });
 
-            if(TextUtils.isEmpty(name) || TextUtils.isEmpty(occupation)){
-                Snackbar.make(v,R.string.empty,Snackbar.LENGTH_SHORT).show();
-            }
-            else {
-                Contact contact = new Contact();
-
-                contact.setId(contactId);
-                contact.setName(name);
-                contact.setOccupation(occupation);
-
-                //call update method.
-                ContactViewModel.update(contact);
-                finish();
-            }
+        //delete btn
+        binding.deleteButton.setOnClickListener(v -> {
+            edit(v,true);
         });
 
         //check isEdit
@@ -132,7 +121,29 @@ public class NewContact extends AppCompatActivity {
 
     }
 
+    private void edit(View v,Boolean isDelete) {
+        String name = binding.etName.getText().toString();
+        String occupation = binding.etOccupation.getText().toString();
 
+        if(TextUtils.isEmpty(name) || TextUtils.isEmpty(occupation)){
+            Snackbar.make(v,R.string.empty,Snackbar.LENGTH_SHORT).show();
+        }
+        else {
+            Contact contact = new Contact();
+
+            contact.setId(contactId);
+            contact.setName(name);
+            contact.setOccupation(occupation);
+
+            if(isDelete == true)
+                ContactViewModel.delete(contact);
+            else
+                ContactViewModel.update(contact);
+
+
+            finish();
+        }
+    }
 
 
 }
