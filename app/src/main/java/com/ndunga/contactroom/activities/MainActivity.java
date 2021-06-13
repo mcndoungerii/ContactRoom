@@ -26,6 +26,8 @@ import com.ndunga.contactroom.model.ContactViewModel;
 public class MainActivity extends AppCompatActivity implements RecyclerViewAdapter.onContactClickListener {
 
     public static final int NEW_CONTACT_REQUEST_CODE = 1;
+    public static final String NAME_DET = "name_det";
+    public static final String CONTACT_ID = "contact_id";
     private ContactViewModel contactViewModel;
     private ActivityMainBinding binding;
     private RecyclerViewAdapter recyclerViewAdapter;
@@ -91,8 +93,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
 
         Intent intent = new Intent(this,ContactDetails.class);
 
-        intent.putExtra("name_det",contact.getName());
-        intent.putExtra("occupation_det",contact.getOccupation());
+        intent.putExtra(CONTACT_ID,contact.getId());
 
         startActivity(intent);
     }
